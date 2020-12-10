@@ -2,6 +2,38 @@
         #map {
             background-color: #ffffff
         }
+
+        #mymap {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+        }
+
+        #title-container {
+          color: #afafaf;
+          position: absolute;
+          z-index: 1000;
+          top: 11px;
+          left: 56px;
+          background: #dabeb1;
+          padding: 15px;
+          border-radius: 5%;
+        }
+
+        h1{
+          margin: 0;
+          font-family: 'JetBrains Mono', sans-serif;
+          font-size: 30px;
+        }
+
+        p {
+          font-size: 21px;
+          font-family: 'JetBrains Mono', sans-serif;
+          color: rgb(54, 16, 8);
+          margin-top: 0px;
+        }
         th {
             text-align: left;
             vertical-align: top;

@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
     <head>
+      <link href="https://fonts.googleapis.com/css?family=JetBrains+Mono" rel="stylesheet">
+      <title>CitiBike Trips to Tribeca</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
@@ -32,7 +34,17 @@
         <script src="js/labels.js"></script>
         <script src="data/start_nei_1.js"></script>
         <script src="data/start_stations_2.js"></script>
+        <div id="mymap">
+          <div id="title-container">
+            <h1><span style="color:#383131;">CitiBike Trips to Tribeca</span></h1></br>
+            <p>This map visualizes the volume</br> of CitiBike trips that end in </br>Tribeca by the originating dock </br> or neighborhood.
+            </br>
+          </br><span style="color:#15a2de; font-size: 16px">Data: 2020 CitiBike Trip Data</span>
+         </p>
+          </div>
+          </div>
         <script>
+
         var highlightLayer;
         function highlightFeature(e) {
             highlightLayer = e.target;
@@ -472,7 +484,6 @@
             },
         });
         bounds_group.addLayer(layer_start_stations_2);
-        map.addLayer(layer_start_stations_2);
         var baseMaps = {};
         L.control.layers(baseMaps,{'Trips Starting at Station<br /><table><tr><td style="text-align: center;"><img src="legend/start_stations_2_11000.png" /></td><td>1 - 100 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_1002001.png" /></td><td>100 - 200 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_2003002.png" /></td><td>200 - 300 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_3004003.png" /></td><td>300 - 400 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_4005004.png" /></td><td>400 - 500 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_5006005.png" /></td><td>500 - 600 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_6007006.png" /></td><td>600 - 700 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_7008007.png" /></td><td>700 - 800 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_8009008.png" /></td><td>800 - 900 </td></tr><tr><td style="text-align: center;"><img src="legend/start_stations_2_9009229.png" /></td><td>900 - 922 </td></tr></table>': layer_start_stations_2,'Trips Starting in Neighborhood<br /><table><tr><td style="text-align: center;"><img src="legend/start_nei_1_15000.png" /></td><td>1 - 500 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_50010001.png" /></td><td>500 - 1000 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_100015002.png" /></td><td>1000 - 1500 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_150020003.png" /></td><td>1500 - 2000 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_200025004.png" /></td><td>2000 - 2500 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_250030005.png" /></td><td>2500 - 3000 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_300035006.png" /></td><td>3000 - 3500 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_350040007.png" /></td><td>3500 - 4000 </td></tr><tr><td style="text-align: center;"><img src="legend/start_nei_1_400040048.png" /></td><td>4000 - 4004 </td></tr></table>': layer_start_nei_1,},{collapsed:false}).addTo(map);
         setBounds();
