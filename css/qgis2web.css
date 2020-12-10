@@ -17,20 +17,20 @@
           z-index: 1000;
           top: 11px;
           left: 56px;
-          background: #dabeb1;
+          background: #c69b87;
           padding: 15px;
           border-radius: 5%;
         }
 
         h1{
           margin: 0;
-          font-family: 'JetBrains Mono', sans-serif;
+          font-family: 'Libre Franklin', sans-serif;
           font-size: 30px;
         }
 
         p {
           font-size: 21px;
-          font-family: 'JetBrains Mono', sans-serif;
+          font-family: 'Libre Franklin', sans-serif;
           color: rgb(54, 16, 8);
           margin-top: 0px;
         }
