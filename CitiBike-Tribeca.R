@@ -64,7 +64,7 @@ colnames(join) <- c("station.id","nei.name","geometry")
 
 
 #trips ending in Tribeca
-end.tribeca <- subset(total20, end.station.id %in% c(328,3461,248,3426,426,3664,249,79,276,309, 146))
+end.tribeca <- subset(total20, end.station.id %in% c(309, 3461, 417, 3690, 152, 146, 276, 249, 320, 79, 3664, 3436, 248, 328, 257 ))
 end.tribeca<- merge(end.tribeca, join, by.x='start.station.id', by.y='station.id', all.x=T)
 end.tribeca<- end.tribeca[, !(names(end.tribeca) %in% 'geometry')]
 colnames(end.tribeca)[16] <- "start.nei.name"
@@ -118,9 +118,13 @@ trips.to$pct_male <- sum(end.tribeca$gender == 1)/nrow(end.tribeca)
 trips.to$pct_female <- sum(end.tribeca$gender == 2)/nrow(end.tribeca) #check
 trips.to$gender_unk <- sum(end.tribeca$gender == 0)/nrow(end.tribeca)
 trips.to$most_common_nei <- getmode(end.tribeca$start.nei.name)
+
+trips <- as.data.frame(table(end.tribeca$start.station.id, end.tribeca$end.station.id))
+
+
 trips.to$peak_hour<- getmode(end.tribeca$start.nei.name)
-
-
+inout <- end.tribeca[which(end.tribeca$start.station.id == 3664 & end.tribeca$end.station.id == 3664),]
+median(inout$tripduration)
 
 sample <- end.tribeca[c(1:10),]
 
