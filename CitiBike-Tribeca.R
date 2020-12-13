@@ -7,8 +7,9 @@ library(leafpop)
 library(mapview)
 library(lubridate)
 
-#read in CSVs
 setwd('C:/Users/Ari/Desktop/Waywiser/citibike')
+setwd('/Users/mac/Desktop/waywiser/CitiBikeTribeca/Other')
+#read in CSVs
 jan19 <- read.csv("201901-citibike-tripdata.csv")
 feb19 <- read.csv("201902-citibike-tripdata.csv")
 mar19 <- read.csv("201903-citibike-tripdata.csv")
@@ -33,20 +34,23 @@ sep20 <- read.csv("202009-citibike-tripdata.csv")
 oct20 <- read.csv("202010-citibike-tripdata.csv")
 
 total20 <- rbind(jan20,feb20,mar20,apr20,may20,jun20,jul20,aug20,sep20,oct20)
-total20 <- oct20
+total20 <- read.csv('total20.csv')
 rm(oct20)
 
 crs <- "+init=epsg:4326"
 
 #read in NTA geojson 
 nei <- geojson_read("C:/Users/Ari/Documents/GitHub/CitiBikeTribeca/Data/NYC_neighborhoods.geojson",  what = "sp")
+nei <- geojson_read("/Users/mac/Desktop/waywiser/CitiBikeTribeca/Other/nyc_neighborhoods.geojson",  what = "sp")
 nei <- st_as_sf(nei)
 st_crs(nei) <- crs
 mapview::mapview(nei)
 
 #get station locations
 stations <- distinct(total20, start.station.id, .keep_all = T)
-stations <- stations[c(4,6,7)]
+colnames(stations)
+# stations <- stations[c(4,6,7)] #windows
+stations <- stations[c(5,7,8)] 
 colnames(stations) <- c("station.id", "lat", "lon")
 
 #make spatial stations
@@ -61,7 +65,6 @@ mapview(stations)+mapview(nei)
 join <- st_join(stations, nei, join = st_intersects)
 join <- join[c(1,5,7)]
 colnames(join) <- c("station.id","nei.name","geometry")
-
 
 #trips ending in Tribeca
 end.tribeca <- subset(total20, end.station.id %in% c(309, 3461, 417, 3690, 152, 146, 276, 249, 320, 79, 3664, 3436, 248, 328, 257 ))
@@ -87,7 +90,6 @@ mapview(start.nei, zcol= "n")+mapview(start.stations, cex = "n", zcol= "n")
 mapviewOptions(basemaps = c("CartoDB.Positron"))
 mapviewOptions(default = TRUE)
 mapviewOptions()
-
 mapview(nei)
 
 
@@ -106,7 +108,6 @@ m <- leaflet() %>% addProviderTiles(providers$CartoDB.Positron)
 
 
 #summary statistics
-
 getmode <- function(v) {
   uniqv <- unique(v)
   uniqv[which.max(tabulate(match(v, uniqv)))]
