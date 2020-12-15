@@ -114,7 +114,12 @@ start.stations_change$avg.annual.chg <- (((start.stations_change$'2017'-start.st
 
 #join start ntas back to join
 start.nei <- merge(nei, end.tribeca.nei, by.x='Name', by.y='start.nei.name', all.x=T)
-
+start.nei$daily.avg <- round((start.nei$'2020'+start.nei$'2019'+start.nei$'2018'+start.nei$'2017'+start.nei$'2016')/(92*5))
+start.nei$daily.avg2020 <- round((start.nei$'2020'/92))
+start.nei$daily.avg2019 <- round((start.nei$'2019'/92))
+start.nei$daily.avg2018 <- round((start.nei$'2018'/92))
+start.nei$daily.avg2017 <- round((start.nei$'2017'/92))
+start.nei$daily.avg2016 <- round((start.nei$'2016'/92))
 
 colnames(start.nei)
 

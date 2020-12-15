@@ -106,14 +106,6 @@ st_write(start.stations, "start_stations.geojson")
 st_write(start.nei, "start_nei.geojson")
 
 
-#testing leaflet map
-m <- leaflet() %>% addProviderTiles(providers$CartoDB.Positron)
-               %>% addCircleMarkers(
-                 data = start.stations,
-                 lng = start.stations$geometry
-                 color = ~pal()
-               )
-
 ###########################################
 ###########################################
 ###########################################
