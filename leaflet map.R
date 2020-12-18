@@ -11,34 +11,47 @@ start.stations$average.daily2018 <- round((start.stations$'2018'/92))
 start.stations$average.daily2017 <- round((start.stations$'2017'/92))
 start.stations$average.daily2016 <- round((start.stations$'2016'/92))
 
-station.names <- as.data.frame(unique(total20[c("start.station.id", "start.station.name")]))
+
+#add all stations by year, including ones removed before 2020
+station.names16 <- as.data.frame(unique(total16[c("start.station.id", "start.station.name")]))
+station.names17 <- as.data.frame(unique(total17[c("start.station.id", "start.station.name")]))
+station.names18 <- as.data.frame(unique(total18[c("start.station.id", "start.station.name")]))
+station.names19 <- as.data.frame(unique(total19[c("start.station.id", "start.station.name")]))
+station.names20 <- as.data.frame(unique(total20[c("start.station.id", "start.station.name")]))
+
+station.names <- rbind(station.names16,station.names17,station.names18,station.names19,station.names20)
+station.names <- distinct(station.names, start.station.id, start.station.name)
+
 start.stations <- merge(x = start.stations, y = station.names, by.x = "station.id", by.y= "start.station.id", all.x=TRUE)
 
-map.stations <- start.stations %>% extract(geometry, c('lat', 'lon'), '\\((.*), (.*)\\)', convert = TRUE) 
-map.stations.change <- start.stations_change %>% extract(geometry, c('lat', 'lon'), '\\((.*), (.*)\\)', convert = TRUE) 
+start.stations[is.na(start.stations)] <- 0
+start.stations2 <- subset(start.stations, station.id %in% station.names20$start.station.id)
 
+map.stations <- start.stations2 %>% extract(geometry, c('lat', 'lon'), '\\((.*), (.*)\\)', convert = TRUE) 
+start.nei[is.na(start.nei)] <- 0
 map.neighborhoods <- as(start.nei, 'Spatial')
 
+tribeca <- geojson_read("C:/Users/Ari/Documents/GitHub/CitiBikeTribeca/Other/tribeca.geojson",  what = "sp")
 
+mapview::mapview(tribeca)
 
 ###MAP SEQUENCE###
 
 
 #COLOR RAMPS
-bins <- c(0, 50, 100, 150, 200, 250, 300, 350)
+bins <- c(1, 50, 100, 150, 200, 250, 300, 350)
 pal <- colorBin("Blues", domain = map.neighborhoods$daily.avg, bins = bins, na.color=rgb(0,0,0,0))
 
 pal <- colorNumeric(
   palette = "Blues",
   domain = map.neighborhoods$daily.avg)
 
-bins.stations <- c(0, 10, 20, 30, 40, 50, 60, 70)
+bins.stations <- c(1, 10, 20, 30, 40, 50, 60, 70)
 pal.stations <- colorBin("YlOrRd", domain = map.stations$average.daily2020, bins = bins.stations)
 
 pal.change <- colorNumeric(
   palette = "RdYlGn",
   domain = map.stations.change$avg.annual.chg)
-
 
 #CUSTOM LABELS
 labels2020 <- sprintf(
@@ -69,35 +82,36 @@ labels2016 <- sprintf(
 
 slabels2020 <- sprintf(
   "<strong>%s</strong><br/>%g daily trips from here",
-  map.stations$start.station.name.y, map.stations$average.daily2020
+  map.stations$start.station.name, map.stations$average.daily2020
 ) %>% lapply(htmltools::HTML)
 
 slabels2019 <- sprintf(
   "<strong>%s</strong><br/>%g daily trips from here",
-  map.stations$start.station.name.y, map.stations$average.daily2019
+  map.stations$start.station.name, map.stations$average.daily2019
 ) %>% lapply(htmltools::HTML)
 
 slabels2018 <- sprintf(
   "<strong>%s</strong><br/>%g daily trips from here",
-  map.stations$start.station.name.y, map.stations$average.daily2018
+  map.stations$start.station.name, map.stations$average.daily2018
 ) %>% lapply(htmltools::HTML)
 
 slabels2017 <- sprintf(
   "<strong>%s</strong><br/>%g daily trips from here",
-  map.stations$start.station.name.y, map.stations$average.daily2017
+  map.stations$start.station.name, map.stations$average.daily2017
 ) %>% lapply(htmltools::HTML)
 
 slabels2016 <- sprintf(
   "<strong>%s</strong><br/>%g daily trips from here",
-  map.stations$start.station.name.y, map.stations$average.daily2016
+  map.stations$start.station.name, map.stations$average.daily2016
 ) %>% lapply(htmltools::HTML)
+
+tribeca.label <- "Tribeca"
 
 #BUILD MAP  
 leaflet() %>%
 addProviderTiles(providers$CartoDB.Positron) %>%
 setView(-74.00054107468239, 40.72361200244055,  zoom = 14) %>%
- 
-  
+    
 #NEIGHBORHOODS
 #2020  
 addPolygons(data = map.neighborhoods, 
@@ -114,7 +128,7 @@ addPolygons(data = map.neighborhoods,
                 opacity = 1.0,
                 sendToBack = TRUE),
               group = "Neighborhoods 2020",
-              label = labels) %>%
+              label = labels2020) %>%
 
 #2019  
 addPolygons(data = map.neighborhoods, 
@@ -251,6 +265,22 @@ addCircleMarkers(data = map.stations,
                    fillOpacity = .85,
                    group = "Trips from Docks 2016") %>%  
   
+#Add Tribeca  
+addPolygons(data = tribeca, 
+              fillColor = 'orange',
+              weight = 0,
+              opacity = 1,
+              color = "white",
+              dashArray = "3",
+              fillOpacity = 0.5,
+              highlightOptions = highlightOptions(
+                weight = 3,
+                color = "blue",
+                dashArray = "1",
+                opacity = 1.0,
+                sendToBack = TRUE),
+              label = tribeca.label) %>%  
+  
 hideGroup("Neighborhoods 2020")%>%  
 hideGroup("Neighborhoods 2019")%>%
 hideGroup("Neighborhoods 2018")%>%  
@@ -275,6 +305,4 @@ hideGroup("Trips from Docks 2016")%>%
                                   "Neighborhoods 2017",
                                   "Neighborhoods 2016"),
                    options = layersControlOptions(collapsed = FALSE))
-
-
 
